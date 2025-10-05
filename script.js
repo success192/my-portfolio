@@ -1,68 +1,54 @@
-//Initialize AOS
-AOS.init({
-  duration: 1000,
-  once: true,
-});
-// Dynamic Year
-document.getElementById("year").textContent;
-nt = new Date().getFullYear();
-// Smooth scroll
-const navLinks = document.querySelectorAll(".nav-links a");
-navLinks.forEach((link) => {
-  if (link.hash) {
-    link.addEventListener("click", (e) => {
+// Toggle skill accordion
+function toggleSkills(header) {
+  const content = header.nextElementSibling;
+  const arrow = header.querySelector(".arrow");
+  content.classList.toggle("open");
+  arrow.classList.toggle("rotated");
+  // Smooth Scrolling
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener("click", function (e) {
       e.preventDefault();
-      document.querySelector(link.harsh).scrollI;
-      ntoview({
-        behaviour: "smooth",
-        block: "start",
-      });
+      document.querySelector(this.getAttribute("href"));
+      if (target) {
+        target.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
     });
-  }
-});
-// Navbar background change on scroll
-const header = document.querySelector("header");
-window.addEventListener("scroll", () => {
-  header.classList.toggle("scrolled", window.scrollY > 50);
-});
-// Type Writer effect
-const subtitle = document.querySelector("hero p");
-const text = "Aspiring Developer |Tech Enthusiast |Creative Thinker";
-let i = 0;
-function typeEffect() {
-  if (i < text.length) {
-    subtitle.textContent += text.charAt(i);
-    i++;
-    setTimeout(typeEffect, 60);
-  }
+  });
+  // Scroll animations
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: "0px 0px -100px 0px",
+  };
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("visible");
+      }
+    });
+  }, observerOptions);
+  document.querySelectorAll(".fade-in").forEach((element) => {
+    observer.observe(element);
+  });
+  // Add active nav indicator
+  window.addEventListener("scroll", () => {
+    const sections = document.querySelectorAll("section[id]");
+    const navLinks = document.querySelectorAll(".nav-links a");
+    let current = "";
+    sections.forEach((section) => {
+      const sectionTop = section.offsetTop;
+      const sectionHeight = section.clientHeight;
+      if (scrollY >= sectionTop - 200) {
+        current = section.getAttribute("id");
+      }
+    });
+    navLinks.forEach((link) => {
+      link.classList.remove("active");
+      if (link.getAttribute("href").slice(1) === current) {
+        link.classList.add("active");
+      }
+    });
+  });
 }
-window.addEventListener("DOMContentLoaded", () => {
-  subtitle.textContent = "";
-  typeEffect();
-});
-// Dark Mode Toggle
-const themeToggleBtn = document.getElementById("darkModeToggle");
-themeToggleBtn.addEventListener("click", () => {
-  document.body.classList.toggle("dark-mode");
-  // Switch icon
-  if (document.body.classList.contains("dark-mode")) {
-    toggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
-  } else {
-    toggleBtn.innerHTML = '<i class="fas fa-moon"></i>';
-  }
-});
-// Load saved theme
-if (locoalStorage.getItem("theme") === "dark") {
-  body.classList.add("dark");
-  icon.classList.replace("fa-moon", "fa-sun");
-}
-themeToggle.addEventListener("click", () => {
-  body.classList.toggle("dark");
-  if (body.classList.contains("dark")) {
-    icon.classList.replace("fa-moon", "fa-sun");
-    localStorage.setItem("theme", "dark");
-  } else {
-    icon.classList.replace("fa-sun", "fa-moon");
-    localStorage.setItem("theme", "light");
-  }
-});
